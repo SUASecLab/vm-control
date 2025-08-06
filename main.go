@@ -21,7 +21,7 @@ var (
 
 func runVirshCommand(operation, vm string) {
 	// Construct command
-	cmd := exec.Command("virsh", operation, vm)
+	cmd := exec.Command("virsh", "-c", "qemu:///system", operation, vm)
 	var stdout strings.Builder
 	var stderr strings.Builder
 	cmd.Stdout = &stdout
