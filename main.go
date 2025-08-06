@@ -7,13 +7,17 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/kataras/jwt"
 )
 
-var jwtKey *string
+var (
+	jwtKey            *string
+	allowedOperations = []string{"start", "restart"}
+)
 
 func runVirshCommand(operation, vm string) {
 	// Construct command
@@ -52,6 +56,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	err = verfiedToken.Claims(&claims)
 	if err != nil || len(claims.VMName) == 0 || len(claims.Operation) == 0 {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if !slices.Contains(allowedOperations, claims.Operation) {
+		log.Println("Forbidden operation requested: ", claims.Operation)
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
 	}
 
