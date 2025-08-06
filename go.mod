@@ -5,6 +5,6 @@ go 1.24.4
 toolchain go1.24.5
 
 require (
-	github.com/gorilla/mux v1.8.1 // indirect
-	github.com/kataras/jwt v0.1.16 // indirect
+	github.com/gorilla/mux v1.8.1
+	github.com/kataras/jwt v0.1.16
 )
