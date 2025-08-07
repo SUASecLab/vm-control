@@ -19,7 +19,7 @@ var (
 	allowedOperations = []string{"start", "restart"}
 )
 
-func runVirshCommand(operation, vm string) {
+func runVirshCommand(operation, vm string) (bool, string) {
 	// Construct command
 	cmd := exec.Command("virsh", "-c", "qemu:///system", operation, vm)
 	var stdout strings.Builder
@@ -30,9 +30,16 @@ func runVirshCommand(operation, vm string) {
 	if err != nil {
 		log.Println("Could not run command:", err)
 	}
+	stderrOut := stderr.String()
 	log.Println("Run operation:", operation, vm)
 	log.Println("stdout:", stdout.String())
-	log.Println("stderr:", stderr.String())
+	log.Println("stderr:", stderrOut)
+
+	// Check if operation finished successfully
+	if strings.Contains(stderrOut, "error") || strings.Contains(stderrOut, "fail") {
+		return false, stderrOut
+	}
+	return true, ""
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -65,12 +72,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	success := true
+	stderr := ""
 	if claims.Operation == "restart" {
-		runVirshCommand("destroy", claims.VMName)
-		runVirshCommand("start", claims.VMName)
+		success, stderr = runVirshCommand("destroy", claims.VMName)
+		success2, stderr2 := runVirshCommand("start", claims.VMName)
+		if !success || !success2 {
+			success = false
+			stderr = stderr + "\r\n" + stderr2
+		}
+	} else {
+		success, stderr = runVirshCommand(claims.Operation, claims.VMName)
+	}
+
+	/* Send error message on failure */
+	if !success {
+		http.Error(w, stderr, http.StatusInternalServerError)
 		return
 	}
-	runVirshCommand(claims.Operation, claims.VMName)
 }
 
 func init() {
