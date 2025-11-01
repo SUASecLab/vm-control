@@ -1,10 +1,8 @@
 module github.com/SUASecLab/vm-control
 
-go 1.24.4
-
-toolchain go1.24.5
+go 1.25
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/kataras/jwt v0.1.16
+	github.com/kataras/jwt v0.1.17
 )
