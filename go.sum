@@ -1,4 +1,4 @@
 github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
 github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
-github.com/kataras/jwt v0.1.17 h1:dYjemzcdYqA4ylwq9/56MslCr/pNOyVUZ2bl3hYNHgc=
-github.com/kataras/jwt v0.1.17/go.mod h1:HUnU5HDBCDanVF8zrPVSE2VK8HicospKefZDD4DzOKU=
+github.com/kataras/jwt v0.3.0 h1:tGEavBQKIM9FnfuL9Vf05h5Q3SOZufasPWEZd62qnAA=
+github.com/kataras/jwt v0.3.0/go.mod h1:JshALTOUeRnnSmGHe5OWiLepKNJqViODhL2hY4PowZg=
